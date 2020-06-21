@@ -8,3 +8,4 @@ It store the times that the ping has exceed the limit.
 
 
 ![image](image.png)
+
