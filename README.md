@@ -7,4 +7,4 @@ This script is usefull while u r gaming.
 It store the times that the ping has exceed the limit.
 
 
-[image](image.png)
+![image](image.png)
