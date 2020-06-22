@@ -18,7 +18,11 @@ class Pinging():
         if not self.ping_limit:
             self.ping_limit = 100
         self.run = True
-        self.result = {'count':0, 'high' : {}}
+        self.result = {'count':0, 'high' : []}
+        now = datetime.now()
+        current_time = now.strftime("%m/%d/%Y, %H:%M:%S")
+        with open('log.txt', 'w') as log_file:
+            log_file.write(f"Pinglog start at :\t{current_time}\t limit:{self.ping_limit}ms\t ip:{self.ping_adress}\n")
         answer = None
         while answer not in ("Y", "N", "y", "n"):
             answer = input("Show log [y/n]?: ")
@@ -39,14 +43,19 @@ class Pinging():
             now = datetime.now()
             current_time = now.strftime("%H:%M:%S")
             self.log_panel(size)
+
             for i in test:
                 if i.success and i.time_elapsed_ms > int(self.ping_limit):
                     self.result['count'] += 1
-                    self.result['high'].update({current_time : i.time_elapsed_ms})
+                    self.result['high'].append((current_time , i.time_elapsed_ms))
+                    with open('log.txt', 'a') as log_file:
+                        log_file.write(f"{current_time}\t{i.time_elapsed_ms}\n")
                 elif not i.success:
                     l_packet +=1
                     self.result['count'] += 1
-                    self.result['high'].update({current_time : i.error_message})
+                    self.result['high'].append((current_time , i.error_message))
+                    with open('log.txt', 'a') as log_file:
+                        log_file.write(f"{current_time}\t{i.error_message}\n")
                 loss_perc = str(round( (l_packet*100)/p_packet ,2)) + "%"
                 self.info_panel(size, i.time_elapsed_ms, p_packet, loss_perc)
             # self.result_panel(size)
@@ -66,9 +75,10 @@ class Pinging():
     def log_panel(self, size):
         os.system('cls')
         if self.logging:
+            print("\t{:<6}".format("Last 10 record:"))
             print("\t{:<12}\t{:<12}".format("Time", "Ping"))
-            for key,value in self.result['high'].items():
-                print("\t{:<12}\t{:<12}".format(str(key), str(value)))
+            for item in self.result['high'][-10:-1]:
+                print("\t{:<12}\t{:<12}".format(str(item[0]), str(item[1])))
         print('*'*size[0])
 
 
