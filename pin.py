@@ -3,6 +3,7 @@ import time
 from pythonping import ping
 from datetime import datetime
 
+def prRed(skk): return("\033[91m{}\033[00m" .format(skk))
 
 class Pinging():
     """A simple ping script that store the high pings
@@ -62,9 +63,9 @@ class Pinging():
             #time.sleep(2)
 
     def info_panel(self, size, avgping, p_packet, l_packet):
-        print("\t{:<20}\t{:>12}".format("ping :", avgping), end="\n")
+        print("\t{:<20}\t{:>12}".format("Ping:", prRed(avgping)), end="\n")
         print('*'*size[0])
-        print("\t{:<20}\t{:>12}".format("Check pings for :", self.ping_adress), end="\t")
+        print("\t{:<20}\t{:>12}".format("Check pings for:", self.ping_adress), end="\t")
         print("\t{:<20}\t{:>12}".format("Time limit:", self.ping_limit), end="\n\n")
         print("\t{:<20}\t{:>12}".format("Packet sent:", p_packet), end="\t")
         print("\t{:<20}\t{:>12}".format("Packet loss:", l_packet), end="\n\n")
@@ -77,7 +78,7 @@ class Pinging():
         if self.logging:
             print("\t{:<6}".format("Last 10 record:"))
             print("\t{:<12}\t{:<12}".format("Time", "Ping"))
-            for item in self.result['high'][-10:-1]:
+            for item in self.result['high'][-10:]:
                 print("\t{:<12}\t{:<12}".format(str(item[0]), str(item[1])))
         print('*'*size[0])
 
